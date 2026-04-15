@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Digital de Gestión de Pedidos | SkyOrder</title>
+
+    <!-- Fuente e iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===================== VARIABLES Y ESTILOS GENERALES ===================== */
+        :root {
+            --primary: #6B5DFF;
+            --primary-light: #8B7DFF;
+            --primary-dark: #4B3DCC;
+            --accent: #FF6B6B;
+            --accent-light: #FF8E8E;
+            --success: #00D084;
+            --warning: #FFB347;
+            --blanco: #ffffff;
+            --gris-fondo: #F8F9FA;
+            --gris-oscuro: #2D3436;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glass-shadow: rgba(0, 0, 0, 0.15);
+            --texto: #1a1a1a;
+            --texto-gris: #7F8C8D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--gris-fondo) 0%, #F5F0FF 100%);
+            color: var(--texto);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* =================== ANIMACIONES PRINCIPALES =================== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(107, 93, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(107, 93, 255, 0.6); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes rotateIcon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* =================== HEADER MEJORADO =================== */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(107, 93, 255, 0.3);
+            animation: slideDown 0.5s ease;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+        }
+
+        header::before {
+            content: '✨';
+            display: inline-block;
+            margin-right: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* =================== NAVEGACIÓN Y TIMELINE MEJORADA =================== */
+        .timeline {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 50px auto;
+            padding: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.8s ease 0.2s both;
+        }
+
+        .step {
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .circle {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border: 3px solid var(--blanco);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: var(--blanco);
+            box-shadow: 0 8px 25px rgba(107, 93, 255, 0.3);
+            animation: slideUp 0.6s ease backwards;
+        }
+
+        .step:nth-child(1) .circle { animation-delay: 0s; }
+        .step:nth-child(2) .circle { animation-delay: 0.1s; }
+        .step:nth-child(3) .circle { animation-delay: 0.2s; }
+
+        .circle:hover {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            transform: scale(1.15) rotateY(360deg);
+            box-shadow: 0 15px 50px rgba(255, 107, 107, 0.4);
+        }
+
+        .step p {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            color: var(--texto);
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .step:hover p {
+            color: var(--primary);
+        }
+
+        /* =================== TARJETAS/CARDS MEJORADAS =================== */
+        .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 240, 255, 0.95) 100%);
+            border: 2px solid rgba(107, 93, 255, 0.2);
+            backdrop-filter: blur(20px);
+            margin: 30px auto;
+            padding: 40px;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(107, 93, 255, 0.15);
+            animation: slideUp 0.8s ease;
+            color: var(--texto);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 70px rgba(107, 93, 255, 0.25);
+            border-color: rgba(107, 93, 255, 0.4);
+        }
+
+        /* Asignar animaciones diferentes a cada card */
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+        .card:nth-child(5) { animation-delay: 0.4s; }
+        .card:nth-child(6) { animation-delay: 0.5s; }
+
+        h2 {
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            font-weight: 700;
+            color: var(--texto);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            transition: 0.3s ease;
+            position: relative;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+        }
+
+        h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        p {
+            line-height: 1.8;
+            color: var(--texto-gris);
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 25px;
+            line-height: 2;
+            color: var(--texto-gris);
+        }
+
+        ul li {
+            margin-bottom: 8px;
+            position: relative;
+            transition: 0.3s ease;
+        }
+
+        ul li:before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+            position: absolute;
+            left: -25px;
+            font-size: 1.2rem;
+        }
+
+        ul li:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        /* =================== SECCIÓN HERO =================== */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--accent) 100%);
+            padding: 100px 30px;
+            text-align: center;
+            color: var(--blanco);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.8s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            animation: slideInLeft 0.8s ease 0.2s both;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            margin-bottom: 30px;
+            opacity: 0.95;
+            animation: slideInRight 0.8s ease 0.4s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--blanco);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            animation: slideUp 0.8s ease 0.6s both;
+        }
+
+        .cta-button:hover {
+            background: #FF5252;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(255, 107, 107, 0.5);
+        }
+
+        /* =================== SECCIÓN DE VIDEO =================== */
+        .video-section {
+            background: linear-gradient(135deg, rgba(107, 93, 255, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+            padding: 80px 30px;
+            text-align: center;
+            animation: slideUp 0.8s ease 0.4s both;
+        }
+
+        .video-section h2 {
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(107, 93, 255, 0.25);
+            animation: slideUp 0.8s ease 0.5s both;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 20px;
+        }
+
+        /* =================== FOOTER MEJORADO =================== */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            background: linear-gradient(135deg, var(--gris-oscuro) 0%, #1a1a2e 100%);
+            color: var(--blanco);
+            font-size: 0.95rem;
+            animation: slideUp 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--success));
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 10px 0;
+        }
+
+        /* =================== RESPONSIVIDAD =================== */
+        @media (max-width: 768px) {
+            header {
+                font-size: 1.5rem;
+                padding: 15px 20px;
+            }
+
+            .timeline {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .circle {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 25px;
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .video-section {
+                padding: 50px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                font-size: 1.2rem;
+            }
+
+            header::before {
+                display: none;
+            }
+
+            .timeline {
+                gap: 15px;
+                margin: 30px auto;
+            }
+
+            .circle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .step p {
+                font-size: 0.8rem;
+            }
+
+            .card {
+                padding: 20px;
+                margin: 15px auto;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+                border-left: 4px solid var(--primary);
+            }
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
+
+            ul {
+                margin-left: 15px;
+                line-height: 1.8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =================== ENCABEZADO =================== -->
+<header>
+    SkyOrder | Sistema Digital de Gestión de Pedidos
+</header>
+
+<!-- =================== SECCIÓN HERO =================== -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Revoluciona tu Gestión de Pedidos</h1>
+        <p class="subtitle">Automatiza, optimiza y transforma tu negocio gastronómico con nuestra plataforma digital</p>
+        <a href="#fase1" class="cta-button">Descubre Cómo Funciona ➜</a>
+    </div>
+</section>
+
+<!-- =================== NAVEGACIÓN RÁPIDA =================== -->
+<div class="timeline">
+    <div class="step" onclick="location.href='#fase1'">
+        <div class="circle"><i class="fas fa-lightbulb"></i></div>
+        <p>¿Qué es?</p>
+    </div>
+
+    <div class="step" onclick="location.href='#fase2'">
+        <div class="circle"><i class="fas fa-target"></i></div>
+        <p>Objetivos</p>
+    </div>
+
+    <div class="step" onclick="location.href='#fase3'">
+        <div class="circle"><i class="fas fa-cogs"></i></div>
+        <p>Servicios</p>
+    </div>
+
+    <div class="step" onclick="location.href='#video'">
+        <div class="circle"><i class="fas fa-video"></i></div>
+        <p>Demostración</p>
+    </div>
+</div>
+
+<!-- =================== SECCIÓN 1: ¿QUÉ ES? =================== -->
+<section id="fase1" class="card">
+    <h2><i class="fas fa-info-circle"></i> ¿Qué es el Sistema?</h2>
+    <p>Es una plataforma digital innovadora diseñada para organizar, registrar y visualizar pedidos en tiempo real dentro de negocios gastronómicos. Su propósito es reemplazar procesos manuales que generan retrasos, errores y pérdida de información, permitiendo que tu negocio funcione como un reloj suizo.</p>
+
+    <h3><i class="fas fa-lightbulb"></i> Características principales</h3>
+    <ul>
+        <li>Registro rápido de pedidos desde celular, tablet o computador.</li>
+        <li>Visualización en tiempo real del estado de cada pedido.</li>
+        <li>Historial automático y seguro con respaldos en la nube.</li>
+        <li>Interfaz intuitiva y fácil de usar para administradores y empleados.</li>
+        <li>Sincronización instantánea entre todas las estaciones de trabajo.</li>
+        <li>Reportes detallados y análisis de desempeño.</li>
+    </ul>
+</section>
+
+<!-- =================== SECCIÓN 2: OBJETIVOS =================== -->
+<section id="fase2" class="card">
+    <h2><i class="fas fa-bullseye"></i> ¿Qué busca el proyecto?</h2>
+
+    <h3><i class="fas fa-target"></i> Objetivo general</h3>
+    <p>Optimizar la gestión de pedidos mediante un sistema digital que mejore la eficiencia, reduzca errores y agilice la atención al cliente, transformando por completo la experiencia operativa de tu negocio.</p>
+
+    <h3><i class="fas fa-list-check"></i> Objetivos específicos</h3>
+    <ul>
+        <li>Disminuir tiempos de espera en 40% o más.</li>
+        <li>Evitar pérdida de información con almacenamiento seguro en la nube.</li>
+        <li>Mejorar la comunicación entre cocina, administración y atención al cliente.</li>
+        <li>Automatizar el seguimiento del estado de los pedidos en tiempo real.</li>
+        <li>Generar datos analíticos para tomar decisiones comerciales informadas.</li>
+        <li>Reducir costos operacionales y humanos en procesos administrativos.</li>
+    </ul>
+</section>
+
+<!-- =================== SECCIÓN 3: SERVICIOS =================== -->
+<section id="fase3" class="card">
+    <h2><i class="fas fa-star"></i> Servicios del Sistema</h2>
+
+    <h3><i class="fas fa-cogs"></i> Funciones principales</h3>
+    <ul>
+        <li>Registro digital de pedidos con información completa.</li>
+        <li>Panel de visualización interactivo para cocina y administración.</li>
+        <li>Actualización automática de estados: Pendiente, En preparación, Listo, Entregado.</li>
+        <li>Reportes automáticos de ventas, tiempos y desempeño del personal.</li>
+        <li>Base de datos segura, organizada y respaldada automáticamente.</li>
+        <li>Notificaciones en tiempo real para cambios de estado.</li>
+    </ul>
+
+    <h3><i class="fas fa-crown"></i> Beneficios para tu negocio</h3>
+    <ul>
+        <li>Mayor control del flujo de trabajo y transparencia operativa.</li>
+        <li>Reducción de errores humanos hasta 90%.</li>
+        <li>Mejor experiencia para el cliente con tiempos claros y predecibles.</li>
+        <li>Optimización del tiempo del personal liberándolos de tareas administrativas.</li>
+        <li>Aumento de ventas por mejor eficiencia en la atención.</li>
+        <li>Datos estratégicos para optimizar tu menú y promociones.</li>
+    </ul>
+</section>
+
+<!-- =================== SECCIÓN DE VIDEO =================== -->
+<section id="video" class="video-section">
+    <h2>Ver Demostración en Vivo</h2>
+    <p style="margin-bottom: 40px; font-size: 1.1rem;">Mira cómo funciona nuestro sistema en acción. Este video te mostrará todas las características principales y cómo puede transformar tu negocio.</p>
+    <div class="video-container">
+        <!-- 📌 IMPORTANTE: ID del video actual: S4yawdJ-2AY -->
+        <iframe src="https://www.youtube.com/embed/S4yawdJ-2AY?rel=0&modestbranding=1" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+</section>
+
+<!-- =================== SECCIÓN: SOBRE NOSOTROS =================== -->
+<section class="card">
+    <h2><i class="fas fa-users"></i> Sobre Nosotros</h2>
+    <p><strong style="color: var(--primary);">Sofía Molano</strong> – Experta en diseño de sistemas, desarrollo backend y arquitectura de soluciones digitales escalables.</p>
+    <p><strong style="color: var(--primary);">Alejandro Rengifo</strong> – Emprendedor, analista de necesidades empresariales y especialista en experiencia de usuario (UX).</p>
+    <p>Trabajamos juntos con una visión compartida: crear soluciones digitales modernas, eficientes y adaptables para negocios gastronómicos que buscan mejorar significativamente su proceso de pedidos y operaciones diarias. Nuestro equipo combina experiencia técnica con conocimiento del mercado.</p>
+</section>
+
+<!-- =================== SECCIÓN: ENCUESTA =================== -->
+<section class="card">
+    <h2>Tu Opinión es Importante</h2>
+    <p>Ayúdanos a mejorar continuamente. Tu retroalimentación es fundamental para que podamos crear la mejor solución para tu negocio. ¡Responde nuestra breve encuesta!</p>
+    <p style="margin-top: 30px;">
+        <a href="https://forms.gle/w9A9s131tMm2aAgX6" target="_blank" class="cta-button" style="background: var(--primary);">
+            Responder Encuesta
+        </a>
+    </p>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer>
+    <p><strong>© 2026 – SkyOrder | Sistema Digital de Gestión de Pedidos</strong></p>
+    <p>Transformando la forma en que los negocios gastronómicos gestionan sus operaciones</p>
+    <p style="margin-top: 15px; opacity: 0.7;">Desarrollado para emprendedores innovadores</p>
+</footer>
+
+</body>
+</html>
